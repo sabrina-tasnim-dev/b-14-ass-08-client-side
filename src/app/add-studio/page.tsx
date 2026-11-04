@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 
 import { Section, SectionHeading } from "@/components/home/section"
 import { AddStudioForm } from "@/components/studios/add-studio-form"
-import { toast } from "sonner"
+
 
 export const metadata: Metadata = {
   title: "Add New Studio | StudioSpace",
@@ -10,20 +10,6 @@ export const metadata: Metadata = {
 }
 
 export default async function AddStudioPage() {
-
-// const res=await fetch("http://localhost:5000/add-studio",{
-// method:"POST",
-// headers:{
-//   "Content-Type":"application/json",
-// },
-// body:JSON.stringify(draft)
-// })
-// const data=await res.json()
-// if (!res.ok) {
-//   throw new Error(data.message || "Failed to add studio")
-// }
-
-toast.success("Studio added successfully!")
 
   return (
     <main className="flex-1">
