@@ -1,86 +1,89 @@
-"use client"
+"use client";
 
-import { Suspense, useMemo, useState } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
-import { studios, studioCategories } from "@/data/studios"
-import { Section, SectionHeading } from "@/components/home/section"
+import { Suspense, useMemo, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { studios, studioCategories } from "@/data/studios";
+import { Section, SectionHeading } from "@/components/home/section";
 import {
   CATEGORY_ALL,
   defaultFilters,
   StudioFilters,
   type Filters,
   type SortOption,
-} from "@/components/studios/studio-filters"
-import { StudioGrid } from "@/components/studios/studio-grid"
-import { EmptyState } from "@/components/studios/empty-state"
+} from "@/components/studios/studio-filters";
+import { StudioGrid } from "@/components/studios/studio-grid";
+import { EmptyState } from "@/components/studios/empty-state";
 
 function normalizeCategory(value: string | null): string {
-  if (value && (studioCategories as string[]).includes(value)) return value
-  return CATEGORY_ALL
+  if (value && (studioCategories as string[]).includes(value)) return value;
+  return CATEGORY_ALL;
 }
 
 function matchesQuery(studio: (typeof studios)[number], query: string) {
-  if (!query) return true
-  const needle = query.trim().toLowerCase()
+  if (!query) return true;
+  const needle = query.trim().toLowerCase();
   return (
     studio.title.toLowerCase().includes(needle) ||
     studio.location.toLowerCase().includes(needle)
-  )
+  );
 }
 
 function matchesPrice(hourlyRate: number, maxPrice: string) {
-  if (maxPrice === "any") return true
-  return hourlyRate <= Number(maxPrice)
+  if (maxPrice === "any") return true;
+  return hourlyRate <= Number(maxPrice);
 }
 
 function sortStudios(list: (typeof studios)[number][], sort: SortOption) {
-  const sorted = [...list]
+  const sorted = [...list];
   switch (sort) {
     case "top-rated":
-      return sorted.sort((a, b) => b.rating - a.rating)
+      return sorted.sort((a, b) => b.rating - a.rating);
     case "price-asc":
-      return sorted.sort((a, b) => a.hourlyRate - b.hourlyRate)
+      return sorted.sort((a, b) => a.hourlyRate - b.hourlyRate);
     case "price-desc":
-      return sorted.sort((a, b) => b.hourlyRate - a.hourlyRate)
+      return sorted.sort((a, b) => b.hourlyRate - a.hourlyRate);
     case "newest":
     default:
-      return sorted.sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+      return sorted.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
   }
 }
 
 function StudiosBrowser() {
-  const searchParams = useSearchParams()
-  const router = useRouter()
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
-  const initialCategory = normalizeCategory(searchParams.get("category"))
+  const initialCategory = normalizeCategory(searchParams.get("category"));
   const [filters, setFilters] = useState<Filters>({
     ...defaultFilters,
     category: initialCategory,
-  })
+  });
 
   const updateFilters = (update: Partial<Filters>) => {
-    setFilters((current) => {
-      const next = { ...current, ...update }
-      if ("category" in update) {
-        const params = new URLSearchParams(searchParams.toString())
-        if (next.category === CATEGORY_ALL) {
-          params.delete("category")
-        } else {
-          params.set("category", next.category)
-        }
-        const query = params.toString()
-        router.replace(query ? `/studios?${query}` : "/studios", {
-          scroll: false,
-        })
+    const next = { ...filters, ...update };
+
+    setFilters(next);
+
+    if ("category" in update) {
+      const params = new URLSearchParams(searchParams.toString());
+
+      if (next.category === CATEGORY_ALL) {
+        params.delete("category");
+      } else {
+        params.set("category", next.category);
       }
-      return next
-    })
-  }
+
+      const query = params.toString();
+
+      router.replace(query ? `/studios?${query}` : "/studios", {
+        scroll: false,
+      });
+    }
+  };
 
   const clearFilters = () => {
-    setFilters(defaultFilters)
-    router.replace("/studios", { scroll: false })
-  }
+    setFilters(defaultFilters);
+    router.replace("/studios", { scroll: false });
+  };
 
   const filteredStudios = useMemo(() => {
     const result = studios.filter(
@@ -88,16 +91,16 @@ function StudiosBrowser() {
         matchesQuery(studio, filters.query) &&
         (filters.category === CATEGORY_ALL ||
           studio.category === filters.category) &&
-        matchesPrice(studio.hourlyRate, filters.maxPrice)
-    )
-    return sortStudios(result, filters.sort)
-  }, [filters])
+        matchesPrice(studio.hourlyRate, filters.maxPrice),
+    );
+    return sortStudios(result, filters.sort);
+  }, [filters]);
 
   const hasActiveFilters =
     filters.query !== "" ||
     filters.category !== CATEGORY_ALL ||
     filters.maxPrice !== "any" ||
-    filters.sort !== defaultFilters.sort
+    filters.sort !== defaultFilters.sort;
 
   return (
     <main className="flex-1">
@@ -131,17 +134,21 @@ function StudiosBrowser() {
         </div>
       </Section>
     </main>
-  )
+  );
 }
 
 export default function StudiosPage() {
   return (
     <Suspense
       fallback={
-        <main className="flex-1" aria-busy="true" aria-label="Loading studios" />
+        <main
+          className="flex-1"
+          aria-busy="true"
+          aria-label="Loading studios"
+        />
       }
     >
       <StudiosBrowser />
     </Suspense>
-  )
+  );
 }

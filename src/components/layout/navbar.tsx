@@ -48,7 +48,7 @@ const accountLinks = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/dashboard/studios/new", label: "Add New Studio", icon: Plus },
   { href: "/dashboard/studios", label: "My Studio Listings", icon: Building2 },
-  { href: "/dashboard/bookings", label: "My Bookings", icon: CalendarCheck },
+  { href: "/my-bookings", label: "My Bookings", icon: CalendarCheck },
 ];
 
 const subscribeHash = (onChange: () => void) => {

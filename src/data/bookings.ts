@@ -1,0 +1,68 @@
+
+import type { Booking } from "@/types/booking"
+
+export const mockBookings: Booking[] = [
+  {
+    id: "booking-6710b1e4f3a2c8e9d1234a01",
+    studioId: "6710b1e4f3a2c8e9d1234502",
+    date: "2026-11-12",
+    startTime: "09:00",
+    endTime: "12:30",
+    status: "Confirmed",
+    createdAt: "2026-10-28",
+  },
+  {
+    id: "booking-6710b1e4f3a2c8e9d1234a02",
+    studioId: "6710b1e4f3a2c8e9d1234505",
+    date: "2026-11-05",
+    startTime: "13:00",
+    endTime: "17:00",
+    status: "Confirmed",
+    createdAt: "2026-10-25",
+  },
+  {
+    id: "booking-6710b1e4f3a2c8e9d1234a03",
+    studioId: "6710b1e4f3a2c8e9d1234503",
+    date: "2026-11-08",
+    startTime: "14:00",
+    endTime: "16:00",
+    status: "Pending",
+    createdAt: "2026-11-01",
+  },
+  {
+    id: "booking-6710b1e4f3a2c8e9d1234a04",
+    studioId: "6710b1e4f3a2c8e9d1234504",
+    date: "2026-11-20",
+    startTime: "18:00",
+    endTime: "21:00",
+    status: "Pending",
+    createdAt: "2026-11-02",
+  },
+  {
+    id: "booking-6710b1e4f3a2c8e9d1234a05",
+    studioId: "6710b1e4f3a2c8e9d1234501",
+    date: "2026-10-18",
+    startTime: "10:00",
+    endTime: "13:00",
+    status: "Completed",
+    createdAt: "2026-10-10",
+  },
+  {
+    id: "booking-6710b1e4f3a2c8e9d1234a06",
+    studioId: "6710b1e4f3a2c8e9d1234506",
+    date: "2026-09-30",
+    startTime: "11:00",
+    endTime: "15:00",
+    status: "Completed",
+    createdAt: "2026-09-22",
+  },
+  {
+    id: "booking-6710b1e4f3a2c8e9d1234a07",
+    studioId: "6710b1e4f3a2c8e9d1234501",
+    date: "2026-10-05",
+    startTime: "09:00",
+    endTime: "11:00",
+    status: "Cancelled",
+    createdAt: "2026-09-28",
+  },
+]
