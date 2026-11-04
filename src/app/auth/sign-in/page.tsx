@@ -125,3 +125,14 @@
 // };
 
 // export default SignInPage;
+
+
+const SignInPage = () => {
+    return (
+        <div>
+           <h1>signin page</h1> 
+        </div>
+    );
+};
+
+export default SignInPage;
