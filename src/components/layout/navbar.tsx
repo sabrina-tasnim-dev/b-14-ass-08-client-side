@@ -40,6 +40,7 @@ export type NavUser = { name: string; email?: string; image?: string };
 const links = [
   { href: "/", label: "Home" },
   { href: "/studios", label: "Explore Studios" },
+  { href: "/add-studio", label: "Add Studio" },
   { href: "/#how-it-works", label: "How It Works" },
   { href: "/#about", label: "About Us" },
 ];

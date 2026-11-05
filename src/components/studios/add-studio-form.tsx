@@ -541,12 +541,14 @@ toast.error(
 
           {coverUrl && coverIsValid && !previewFailed && (
             <div className="mt-1 overflow-hidden rounded-lg border border-border">
-              <Image
-                src={coverUrl}
-                alt="Cover image preview"
-                className="h-48 w-full object-cover"
-                onError={() => setPreviewFailed(true)}
-              />
+          <Image
+  src={coverUrl}
+  alt="Cover image preview"
+  width={800}
+  height={400}
+  className="h-48 w-full object-cover"
+  onError={() => setPreviewFailed(true)}
+/>
             </div>
           )}
 
