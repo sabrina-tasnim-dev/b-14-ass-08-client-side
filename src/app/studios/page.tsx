@@ -118,7 +118,7 @@ useEffect(() => {
     setFilters(defaultFilters);
     router.replace("/studios", { scroll: false });
   };
-
+// aksjhydcnxmc
   const filteredStudios = useMemo(() => {
     const result = studios.filter(
       (studio) =>
