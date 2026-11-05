@@ -10,9 +10,11 @@ import {
   Check,
 } from "lucide-react"
 
-import { studios } from "@/data/studios"
+// import { studios } from "@/data/studios"
 import BookingModal from "@/components/studios/booking-modal"
 import { StudioGallery } from "@/components/studios/studio-gallery"
+import type { Studio } from "@/types/studio"
+
 type StudioDetailsPageProps = {
   params: Promise<{ id: string }>
 }
@@ -23,17 +25,25 @@ export default async function StudioDetailsPage({
   const { id } = await params
 
   const res=await fetch(`http://localhost:5000/studio/${id}`)
-  const data=await res.json()
-
-  console.log(data)
-
-  // Find the selected studio
-  const studio = studios.find((item) => item.id === id)
-
-  // Show 404 if studio doesn't exist
-  if (!studio) {
+    if (!res.ok) {
     notFound()
   }
+
+  const data = (await res.json()) as Omit<Studio, "id"> & {
+    id?: string
+    _id?: string
+  }
+
+  const studio: Studio = {
+    ...data,
+    id: data.id ?? data._id ?? id,
+  }
+
+if (!studio) {
+  notFound()
+}
+
+  // Show 404 if studio doesn't exist
 
   return (
     <main className="flex-1">
