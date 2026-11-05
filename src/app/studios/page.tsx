@@ -1,9 +1,10 @@
 "use client";
 
-import { Suspense, useMemo, useState } from "react";
+import { Suspense,useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { studios, studioCategories } from "@/data/studios";
+import { studioCategories } from "@/data/studios";
 import { Section, SectionHeading } from "@/components/home/section";
+import type { Studio } from "@/types/studio";
 import {
   CATEGORY_ALL,
   defaultFilters,
@@ -19,7 +20,7 @@ function normalizeCategory(value: string | null): string {
   return CATEGORY_ALL;
 }
 
-function matchesQuery(studio: (typeof studios)[number], query: string) {
+function matchesQuery(studio: Studio, query: string) {
   if (!query) return true;
   const needle = query.trim().toLowerCase();
   return (
@@ -33,7 +34,7 @@ function matchesPrice(hourlyRate: number, maxPrice: string) {
   return hourlyRate <= Number(maxPrice);
 }
 
-function sortStudios(list: (typeof studios)[number][], sort: SortOption) {
+function sortStudios(list: Studio[], sort: SortOption) {
   const sorted = [...list];
   switch (sort) {
     case "top-rated":
@@ -50,7 +51,40 @@ function sortStudios(list: (typeof studios)[number][], sort: SortOption) {
 
 function StudiosBrowser() {
   const searchParams = useSearchParams();
+
   const router = useRouter();
+const [studios,setStudios]=useState<Studio[]>([]);
+const [loading, setLoading] = useState(true);
+const [error,setError]=useState("");
+
+useEffect(() => {
+  const fetchStudios = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/studios");
+
+      if (!res.ok) {
+        throw new Error("Failed to fetch studios");
+      }
+
+      const data = await res.json();
+
+      const formattedStudios: Studio[] = data.map(
+        (studio: Studio & { _id: string }) => ({
+          ...studio,
+          id: studio._id,
+        })
+      );
+
+      setStudios(formattedStudios);
+    } catch (error) {
+      setError("Failed to load studios");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchStudios();
+}, []);
 
   const initialCategory = normalizeCategory(searchParams.get("category"));
   const [filters, setFilters] = useState<Filters>({
@@ -94,13 +128,21 @@ function StudiosBrowser() {
         matchesPrice(studio.hourlyRate, filters.maxPrice),
     );
     return sortStudios(result, filters.sort);
-  }, [filters]);
+  }, [studios,filters]);
 
   const hasActiveFilters =
     filters.query !== "" ||
     filters.category !== CATEGORY_ALL ||
     filters.maxPrice !== "any" ||
     filters.sort !== defaultFilters.sort;
+
+    if (loading) {
+  return <p className="py-10 text-center">Loading studios...</p>;
+}
+
+if (error) {
+  return <p className="py-10 text-center">{error}</p>;
+}
 
   return (
     <main className="flex-1">
