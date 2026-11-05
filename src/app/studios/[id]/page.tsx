@@ -22,6 +22,11 @@ export default async function StudioDetailsPage({
 }: StudioDetailsPageProps) {
   const { id } = await params
 
+  const res=await fetch(`http://localhost:5000/studio/${id}`)
+  const data=await res.json()
+
+  console.log(data)
+
   // Find the selected studio
   const studio = studios.find((item) => item.id === id)
 
