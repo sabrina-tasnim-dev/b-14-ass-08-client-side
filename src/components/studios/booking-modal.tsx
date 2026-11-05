@@ -6,6 +6,7 @@ import { CalendarDays, Clock, X } from "lucide-react"
 import type { Studio } from "@/types/studio"
 
 export default function BookingModal({ studio }: { studio: Studio }) {
+  
   const [isOpen, setIsOpen] = useState(false)
   const [date, setDate] = useState("")
   const [startTime, setStartTime] = useState("")

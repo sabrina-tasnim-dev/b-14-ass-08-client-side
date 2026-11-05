@@ -10,8 +10,8 @@ import {
   Check,
 } from "lucide-react"
 
-// import { studios } from "@/data/studios"
 import BookingModal from "@/components/studios/booking-modal"
+import { EditStudioDialog } from "@/components/studios/edit-studio-dialog"
 import { StudioGallery } from "@/components/studios/studio-gallery"
 import type { Studio } from "@/types/studio"
 
@@ -90,6 +90,10 @@ if (!studio) {
                   / hour
                 </span>
               </p>
+
+              <div className="mt-4 flex sm:justify-end">
+                <EditStudioDialog studio={studio} />
+              </div>
             </div>
           </div>
         </div>
