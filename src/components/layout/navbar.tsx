@@ -180,13 +180,16 @@ export function Navbar({
           ) : (
             <div className="hidden items-center gap-1.5 md:flex">
               <Link
-                href="/login"
+                href="/auth/sign-in"
                 className={buttonVariants({ variant: "ghost", size: "sm" })}
               >
-                Log in
+                Sign in
               </Link>
-              <Link href="/register" className={buttonVariants({ size: "sm" })}>
-                Register
+              <Link
+                href="/auth/sign-up"
+                className={buttonVariants({ size: "sm" })}
+              >
+                Sign up
               </Link>
             </div>
           )}
@@ -271,21 +274,24 @@ export function Navbar({
                     <SheetClose
                       nativeButton={false}
                       render={
-                        <Link href="/register" className={buttonVariants()} />
+                        <Link
+                          href="/auth/sign-up"
+                          className={buttonVariants()}
+                        />
                       }
                     >
-                      Register
+                      Sign up
                     </SheetClose>
                     <SheetClose
                       nativeButton={false}
                       render={
                         <Link
-                          href="/login"
+                          href="/auth/sign-in"
                           className={buttonVariants({ variant: "outline" })}
                         />
                       }
                     >
-                      Log in
+                      Sign in
                     </SheetClose>
                   </div>
                 )}

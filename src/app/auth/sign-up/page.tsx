@@ -1,267 +1,345 @@
-// 'use client'
-// import { Button, Description, FieldError, Form, Input, InputGroup, Label, TextField } from '@heroui/react';
-// import React, { useState } from 'react';
-// import {Check, Eye, EyeSlash} from "@gravity-ui/icons";
-// import { authClient, signIn, signUp } from '@/lib/auth-client';
-// import { toast } from 'react-toastify';
-// import { redirect } from 'next/navigation';
-// import { FaGoogle ,FaGithub} from 'react-icons/fa';
-// import Link from 'next/link';
+"use client";
 
-// const SignUpPage = () => {
-//       const onSubmit = async(e) => {
-//     e.preventDefault();
-//     const formData = new FormData(e.currentTarget);
-//     const data = Object.fromEntries(formData.entries());
-//     // const password = formData.get("password");
-//     // c
-//     console.log('from data',data)
+import { useState, type FormEvent } from "react";
+import Link from "next/link";
+import { Eye, EyeOff, UserPlus } from "lucide-react";
+import { toast } from "sonner";
 
-//     const {data:resData,error}=await signUp.email({
-//         name:'',
-//         email:data.email,
-//         password:data.password
-//     })
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
-// toast.success(`You have submited successfully!`);
-  
-// console.log(resData,error)
-
-// if(data){
-//     redirect("/")
-// }
-// };
-// // google signin
-
-// const handleGoogleSignIn=async(e)=>{
-//   e.preventDefault()
-//   const resData=await signIn.social({
-//     provider:"google"
-//   })
-//   console.log("google",resData)
-// }
-//  const [isVisible, setIsVisible] = useState(false);
-// // github signin
-
-// const handleGithubsignIn = async () => {
-//     const data = await authClient.signIn.social({
-//         provider: "github"
-//     })
-// }
-//     return (
-       
-// <main className="min-h-screen bg-green-50 px-4 py-8">
-//   <div className="mx-auto flex w-full max-w-md flex-col items-center">
-//     <div className="text-center">
-//       <h1 className="text-2xl font-bold text-gray-900">
-//         অ্যাকাউন্ট তৈরি করুন
-//       </h1>
-//       <p className="mt-2 text-sm text-gray-600">
-//         বিনামূল্যে সাইন আপ করে পণ্যের বিস্তারিত দাম দেখুন।
-//       </p>
-//     </div>
-
-//     <Form
-//       className="mt-5 flex w-full flex-col items-stretch gap-4 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-6"
-//       onSubmit={onSubmit}
-//       onInvalid={() => {
-//     toast.error("সবগুলো তথ্য সঠিকভাবে পূরণ করুন!");
-//   }}
-//     >
-//       <TextField
-//         isRequired
-//         name="name"
-//         className="w-full"
-//         validate={(value) => {
-//           if (value.length < 3) {
-//             return "নাম কমপক্ষে ৩ অক্ষরের হতে হবে";
-//           }
-//           return null;
-//         }}
-//       >
-//         <Label>আপনার নাম</Label>
-//         <Input placeholder="সম্পূর্ণ নাম লিখুন" />
-//         <FieldError />
-//       </TextField>
-
-//       <TextField
-//         isRequired
-//         className="w-full"
-//         name="email"
-//         type="email"
-//         validate={(value) => {
-//           if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)) {
-//             return "সঠিক ইমেইল ঠিকানা লিখুন";
-//           }
-//           return null;
-//         }}
-//       >
-//         <Label>ইমেইল ঠিকানা</Label>
-//         <Input placeholder="আপনার ইমেইল লিখুন" />
-//         <FieldError />
-//       </TextField>
-
-//          <TextField isRequired
-//                   name="password"
-//                   type={isVisible ? "text" : "password"}
-//                   className="w-full"
-//                   validate={(value) => {
-//                     if (value.length < 8) {
-//                       return "পাসওয়ার্ড কমপক্ষে ৮ অক্ষরের হতে হবে";
-//                     }
-      
-//                     if (!/[A-Z]/.test(value)) {
-//                       return "কমপক্ষে একটি ইংরেজি বড় হাতের অক্ষর দিন";
-//                     }
-      
-//                     if (!/[0-9]/.test(value)) {
-//                       return "কমপক্ষে একটি সংখ্যা দিন";
-//                     }
-      
-//                     return null;
-//                   }}>
-//                   <Label>পাসওয়ার্ড</Label>
-      
-//                   <InputGroup className="w-full">
-//                     <Input className="flex-1 min-w-0" placeholder="পাসওয়ার্ড লিখুন" />
-      
-//                     <InputGroup.Suffix className="shrink-0">
-//                       <Button
-//                         type="button"
-//                         isIconOnly
-//                         aria-label={isVisible ? "Hide password" : "Show password"}
-//                         variant="ghost"
-//                         onPress={() => setIsVisible(!isVisible)}
-//                       >
-//                         {isVisible ? (
-//                           <Eye className="size-4" />
-//                         ) : (
-//                           <EyeSlash className="size-4" />
-//                         )}
-//                       </Button>
-//                     </InputGroup.Suffix>
-//                   </InputGroup>
-      
-//                   <Description>
-//                     কমপক্ষে ৮ অক্ষর, একটি বড় হাতের ইংরেজি অক্ষর ও একটি সংখ্যা দিন।
-//                   </Description>
-      
-//                   <FieldError />
-//                 </TextField>
-      
-//    <TextField isRequired
-//             name="confirmPassword"
-//             type={isVisible ? "text" : "password"}
-//             className="w-full"
-//             validate={(value) => {
-//               if (value.length < 8) {
-//                 return "পাসওয়ার্ড কমপক্ষে ৮ অক্ষরের হতে হবে";
-//               }
-
-//               if (!/[A-Z]/.test(value)) {
-//                 return "কমপক্ষে একটি ইংরেজি বড় হাতের অক্ষর দিন";
-//               }
-
-//               if (!/[0-9]/.test(value)) {
-//                 return "কমপক্ষে একটি সংখ্যা দিন";
-//               }
-
-//               return null;
-//             }}>
-//             <Label>পাসওয়ার্ড নিশ্চিত করুন </Label>
-
-//             <InputGroup className="w-full">
-//               <Input className="flex-1 min-w-0" placeholder="পাসওয়ার্ড লিখুন" />
-
-//               <InputGroup.Suffix className="shrink-0">
-//                 <Button
-//                   type="button"
-//                   isIconOnly
-//                   aria-label={isVisible ? "Hide password" : "Show password"}
-//                   variant="ghost"
-//                   onPress={() => setIsVisible(!isVisible)}
-//                 >
-//                   {isVisible ? (
-//                     <Eye className="size-4" />
-//                   ) : (
-//                     <EyeSlash className="size-4" />
-//                   )}
-//                 </Button>
-//               </InputGroup.Suffix>
-//             </InputGroup>
-
-//             <Description>
-//               কমপক্ষে ৮ অক্ষর, একটি বড় হাতের ইংরেজি অক্ষর ও একটি সংখ্যা দিন।
-//             </Description>
-
-//             <FieldError />
-//           </TextField>
-// {/* পাসওয়ার্ড নিশ্চিত করুন */}
-
-//       <div className="flex gap-3 pt-2">
-//         <Button type="submit" className="flex-1 ">
-//           <Check />
-//           সাইন আপ করুন
-//         </Button>
-
-//         <Button type="reset" variant="secondary">
-//           মুছে ফেলুন
-//         </Button>
-//       </div>
-//        <div>
-   
-// <div className="w-full">
-//   <p className="mb-3 text-center">অথবা</p>
-
-//   <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2">
-//     <button
-//   type="button"
-//   onClick={handleGoogleSignIn}
-//   className="btn btn-success w-full min-w-0 flex-nowrap whitespace-nowrap text-xs sm:text-sm"
-// >
-//   <FaGoogle className="shrink-0" />
-//   <span>Google দিয়ে চালিয়ে যান</span>
-// </button>
-
-// <button
-//   type="button"
-//   onClick={handleGithubsignIn}
-//   className="btn btn-success w-full min-w-0 flex-nowrap whitespace-nowrap text-xs sm:text-sm"
-// >
-//   <FaGithub className="shrink-0" />
-//   <span>GitHub দিয়ে চালিয়ে যান</span>
-// </button>
-//   </div>
-
-//   <p className="mt-4 text-center">
-//     অ্যাকাউন্ট আছে?{" "}
-//     <Link  href={"/auth/sign-in"}>
-//       <span className="text-green-500 underline">সাইন ইন করুন</span>
-//     </Link>
-//   </p>
-// </div>
-
-    
-//     </div>
-//     </Form>
-
-//   </div>
- 
-// </main>
-
-//     );
-// };
-
-// export default SignUpPage;
-
-
-
-const SignUpPage = () => {
-    return (
-        <div>
-           signup page 
-        </div>
-    );
+type SignUpFormValues = {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
 };
 
-export default SignUpPage;
+type SignUpFormErrors = Partial<Record<keyof SignUpFormValues, string>>;
+
+type SignUpFieldName = keyof SignUpFormValues;
+
+const initialValues: SignUpFormValues = {
+  name: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+};
+
+const EMAIL_PATTERN = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+
+function validateName(value: string): string | undefined {
+  const trimmed = value.trim();
+
+  if (!trimmed) return "Your name is required.";
+  if (trimmed.length < 3) return "Name must be at least 3 characters.";
+
+  return undefined;
+}
+
+function validateEmail(value: string): string | undefined {
+  const trimmed = value.trim();
+
+  if (!trimmed) return "Email address is required.";
+  if (!EMAIL_PATTERN.test(trimmed)) return "Enter a valid email address.";
+
+  return undefined;
+}
+
+function validatePassword(value: string): string | undefined {
+  if (!value) return "Password is required.";
+  if (value.length < 8) return "Password must be at least 8 characters.";
+  if (!/[A-Z]/.test(value)) return "Include at least one uppercase letter.";
+  if (!/[0-9]/.test(value)) return "Include at least one number.";
+
+  return undefined;
+}
+
+function validateConfirmPassword(
+  value: string,
+  password: string
+): string | undefined {
+  if (!value) return "Please confirm your password.";
+  if (value !== password) return "Passwords do not match.";
+
+  return undefined;
+}
+
+function validate(values: SignUpFormValues): SignUpFormErrors {
+  return {
+    name: validateName(values.name),
+    email: validateEmail(values.email),
+    password: validatePassword(values.password),
+    confirmPassword: validateConfirmPassword(
+      values.confirmPassword,
+      values.password
+    ),
+  };
+}
+
+function FieldMessage({ id, message }: { id: string; message?: string }) {
+  if (!message) return null;
+
+  return (
+    <p id={id} className="text-xs text-destructive">
+      {message}
+    </p>
+  );
+}
+
+type PasswordFieldProps = {
+  id: string;
+  label: string;
+  autoComplete: string;
+  value: string;
+  error?: string;
+  hint: string;
+  isVisible: boolean;
+  onToggleVisibility: () => void;
+  onChange: (value: string) => void;
+  onBlur: () => void;
+};
+
+function PasswordField({
+  id,
+  label,
+  autoComplete,
+  value,
+  error,
+  hint,
+  isVisible,
+  onToggleVisibility,
+  onChange,
+  onBlur,
+}: PasswordFieldProps) {
+  return (
+    <div className="flex flex-col gap-2">
+      <Label htmlFor={id}>
+        {label}{" "}
+        <span className="text-destructive" aria-hidden="true">
+          *
+        </span>
+      </Label>
+      <div className="relative">
+        <Input
+          id={id}
+          type={isVisible ? "text" : "password"}
+          autoComplete={autoComplete}
+          value={value}
+          onChange={(event) => onChange(event.target.value)}
+          onBlur={onBlur}
+          placeholder="Enter your password"
+          aria-invalid={Boolean(error)}
+          aria-describedby={error ? `${id}-error` : undefined}
+          className="h-9 pr-9"
+        />
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
+          className="absolute top-1/2 right-1 -translate-y-1/2"
+          onClick={onToggleVisibility}
+          aria-label={isVisible ? "Hide password" : "Show password"}
+          aria-pressed={isVisible}
+        >
+          {isVisible ? <EyeOff /> : <Eye />}
+        </Button>
+      </div>
+      <FieldMessage id={`${id}-error`} message={error} />
+      {!error && <p className="text-xs text-muted-foreground">{hint}</p>}
+    </div>
+  );
+}
+
+export default function SignUpPage() {
+  const [values, setValues] = useState<SignUpFormValues>(initialValues);
+  const [touched, setTouched] = useState<Partial<Record<SignUpFieldName, boolean>>>({});
+  const [submitted, setSubmitted] = useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isConfirmVisible, setIsConfirmVisible] = useState(false);
+
+  const errors = validate(values);
+
+  const errorFor = (field: SignUpFieldName) =>
+    submitted || touched[field] ? errors[field] : undefined;
+
+  const markTouched = (field: SignUpFieldName) => {
+    setTouched((current) => ({ ...current, [field]: true }));
+  };
+
+  const update = (field: SignUpFieldName, value: string) => {
+    setValues((current) => ({ ...current, [field]: value }));
+  };
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setSubmitted(true);
+
+    const currentErrors = validate(values);
+    const hasErrors = Object.values(currentErrors).some(Boolean);
+
+    if (hasErrors) {
+      toast.error("Please fix the highlighted fields and try again.");
+      return;
+    }
+
+    toast.success("Sign-up form validated", {
+      description:
+        "Your account has not been created yet — authentication will be connected later.",
+    });
+  };
+
+  const handleClear = () => {
+    setValues(initialValues);
+    setTouched({});
+    setSubmitted(false);
+    setIsPasswordVisible(false);
+    setIsConfirmVisible(false);
+  };
+
+  const nameError = errorFor("name");
+  const emailError = errorFor("email");
+  const passwordError = errorFor("password");
+  const confirmPasswordError = errorFor("confirmPassword");
+
+  return (
+    <main className="flex flex-1 items-center justify-center px-4 py-12 sm:py-16">
+      <div className="flex w-full max-w-md flex-col gap-6">
+        <div className="flex flex-col items-center gap-2 text-center">
+          <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+            Create your account
+          </h1>
+          <p className="max-w-sm text-sm text-muted-foreground">
+            Join StudioSpace to book creative studios by the hour and manage
+            your listings.
+          </p>
+        </div>
+
+        <Card className="w-full">
+          <CardHeader className="text-center">
+            <CardTitle className="text-base">Sign up for StudioSpace</CardTitle>
+            <CardDescription>
+              Fill in the details below to create your account.
+            </CardDescription>
+          </CardHeader>
+
+          <CardContent>
+            <form
+              onSubmit={handleSubmit}
+              noValidate
+              className="flex flex-col gap-4"
+            >
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="sign-up-name">
+                  Full name{" "}
+                  <span className="text-destructive" aria-hidden="true">
+                    *
+                  </span>
+                </Label>
+                <Input
+                  id="sign-up-name"
+                  type="text"
+                  autoComplete="name"
+                  value={values.name}
+                  onChange={(event) => update("name", event.target.value)}
+                  onBlur={() => markTouched("name")}
+                  placeholder="e.g. Alex Morgan"
+                  aria-invalid={Boolean(nameError)}
+                  aria-describedby={nameError ? "sign-up-name-error" : undefined}
+                  className="h-9"
+                />
+                <FieldMessage id="sign-up-name-error" message={nameError} />
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="sign-up-email">
+                  Email address{" "}
+                  <span className="text-destructive" aria-hidden="true">
+                    *
+                  </span>
+                </Label>
+                <Input
+                  id="sign-up-email"
+                  type="email"
+                  autoComplete="email"
+                  inputMode="email"
+                  value={values.email}
+                  onChange={(event) => update("email", event.target.value)}
+                  onBlur={() => markTouched("email")}
+                  placeholder="you@example.com"
+                  aria-invalid={Boolean(emailError)}
+                  aria-describedby={emailError ? "sign-up-email-error" : undefined}
+                  className="h-9"
+                />
+                <FieldMessage id="sign-up-email-error" message={emailError} />
+              </div>
+
+              <PasswordField
+                id="sign-up-password"
+                label="Password"
+                autoComplete="new-password"
+                value={values.password}
+                error={passwordError}
+                hint="At least 8 characters, one uppercase letter and one number."
+                isVisible={isPasswordVisible}
+                onToggleVisibility={() =>
+                  setIsPasswordVisible((visible) => !visible)
+                }
+                onChange={(value) => update("password", value)}
+                onBlur={() => markTouched("password")}
+              />
+
+              <PasswordField
+                id="sign-up-confirm-password"
+                label="Confirm password"
+                autoComplete="new-password"
+                value={values.confirmPassword}
+                error={confirmPasswordError}
+                hint="Re-enter your password to confirm it."
+                isVisible={isConfirmVisible}
+                onToggleVisibility={() =>
+                  setIsConfirmVisible((visible) => !visible)
+                }
+                onChange={(value) => update("confirmPassword", value)}
+                onBlur={() => markTouched("confirmPassword")}
+              />
+
+              <div className="flex flex-col gap-3 pt-1 sm:flex-row">
+                <Button type="submit" size="lg" className="flex-1">
+                  <UserPlus />
+                  Create account
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="lg"
+                  onClick={handleClear}
+                >
+                  Clear form
+                </Button>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
+
+        <p className="text-center text-sm text-muted-foreground">
+          Already have an account?{" "}
+          <Link
+            href="/auth/sign-in"
+            className="font-medium text-foreground underline-offset-4 hover:underline"
+          >
+            Sign in
+          </Link>
+        </p>
+      </div>
+    </main>
+  );
+}

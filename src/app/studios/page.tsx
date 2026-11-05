@@ -39,13 +39,19 @@ function sortStudios(list: Studio[], sort: SortOption) {
   switch (sort) {
     case "top-rated":
       return sorted.sort((a, b) => b.rating - a.rating);
+
     case "price-asc":
       return sorted.sort((a, b) => a.hourlyRate - b.hourlyRate);
+
     case "price-desc":
       return sorted.sort((a, b) => b.hourlyRate - a.hourlyRate);
+
     case "newest":
     default:
-      return sorted.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+      return sorted.sort((a, b) =>
+          new Date(b.createdAt || 0).getTime() -
+          new Date(a.createdAt || 0).getTime()
+    );
   }
 }
 
